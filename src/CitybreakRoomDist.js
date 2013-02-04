@@ -32,35 +32,58 @@ function CitybreakRoomDist(people, rooms) {
   }
     
 
+  var i, roomList;
+
   this.execute = function() 
   {
-    var i, string, perRoom, roomList = [];
-    
+    resetAllRoomsToZero();
+    calculatePeoplePerRoom();
+
+    return roomListArrayToString();
+  };
+
+  function resetAllRoomsToZero()
+  {
+    roomList = [];
     for(i = 1; i <= rooms; i++) {
       roomList.push(0);
     }
+  }
 
-    while(people > 0)
+  function calculatePeoplePerRoom()
+  {
+    while(thereIsPeopleLeft())
     {
-      for(i = 0; i <= (roomList.length - 1); i++)
+      for(i = 0; i <= maxRoomIndex(); i++)
       {
-        roomList[i] += 1;
-        people--;
+        distributePersonToRoom(i);
 
-        if(people <= 0) {
+        if(! thereIsPeopleLeft()) {
           break;
         }
       } 
     }
+  }
 
+  function distributePersonToRoom(index)
+  {
+    roomList[index] += 1;
+    people--;
+  }
 
-    string = roomList[0];
-    for(i = 1; i <= (roomList.length - 1); i++) {
-      string += 'r'+ roomList[i];
-    }
-      
+  function roomListArrayToString()
+  {
+    return roomList.join('r');
+  }
 
-    return string;
-  };
+  function thereIsPeopleLeft()
+  {
+    return people > 0; 
+  }
+
+  function maxRoomIndex()
+  {
+    return roomList.length - 1
+  }
 
 }
